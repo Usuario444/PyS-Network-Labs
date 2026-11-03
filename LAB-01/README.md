@@ -68,7 +68,7 @@ Bloque base: **`192.168.10.0/24`**
 > **Credenciales de Acceso SSHv2 (Todos los equipos):**
 > - 👤 **Usuario:** `admin`
 > - 🔑 **Contraseña:** `admin`
-> - 🌐 **Dominio:** `pysnetworks.local` (RSA 2048 bits)
+> - 🌐 **Dominio:** `local-lab` (RSA 2048 bits)
 
 | Dispositivo | Hostname | Interfaz | Dirección IP | Máscara | Default Gateway |
 | :--- | :--- | :--- | :--- | :--- | :--- |
