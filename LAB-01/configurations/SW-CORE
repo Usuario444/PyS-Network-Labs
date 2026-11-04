@@ -160,7 +160,7 @@ line vty 0 15
  login local
  transport input ssh
  logging synchronous
- exec-timeout 5 0
+ exec-timeout 10 0
 exit
 !
 end
