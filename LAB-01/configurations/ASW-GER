@@ -1,0 +1,28 @@
+> ## GERENCIA (VLAN 40)
+>
+> GERENCIA tiene su propio archivo para que cada área sea fácil de revisar,
+  pero comparte equipo con ADMINISTRACIÓN (VLAN 30). Ambas VLANs se conectan al switch `SW-ACCESS-ADMINISTRACION`, 
+  así que la base del equipo (hostname, VLANs, EtherChannel, trunk, 
+  SVI de gestión y SSH) está en el archivo de ADMINISTRACIÓN y no se repite aquí.
+
+> Este archivo contiene solo lo que GERENCIA agrega:
+> - Puertos de acceso Gi1/0 y Gi1/ asignados a la VLAN 40, donde se conectan PC1-GER y PC2-GER.
+> - Red de la VLAN 40: 192.168.10.112/29.
+>
+> Orden de aplicación: primero se carga la configuración base de 'SW-ACCESS-ADMINISTRACION' y después este bloque.
+
+! ============================================================
+! CONFIGURACION-SW-ACCESS-GERENCIA
+! Proyecto: Laboratorio personal de redes y ciberseguridad
+! Plataforma: Cisco IOS en GNS3 (entorno de práctica, no producción)
+! Aplicar en: SW-ACCESS-ADMINISTRACION (después de la configuración base)
+! ============================================================
+
+PUERTOS-DE-ACCESO-GERENCIA
+---------------------------------------
+(config)# interface range g1/0-1
+(config-if-range)# description PUERTOS-ACCESO-GERENCIA
+(config-if-range)# switchport mode access
+(config-if-range)# switchport access vlan 40
+(config-if-range)# no shutdown
+(config-if-range)# exit
