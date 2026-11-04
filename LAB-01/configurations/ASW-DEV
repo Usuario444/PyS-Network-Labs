@@ -2,7 +2,7 @@ CONFIGURACION-SW-ACCESS-DESARROLLO
 ---------------------------------------
 enable
 configure terminal
-hostname PyS-SW-ACCESS-DESARROLLO
+hostname SW-ACCESS-DESARROLLO
 no ip domain-lookup
 ip domain-name lab-local
 service password-encryption
