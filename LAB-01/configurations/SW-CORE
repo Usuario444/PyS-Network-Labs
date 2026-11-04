@@ -1,1 +1,167 @@
+CONFIGURACION-SW-CORE
+---------------------------------------
+enable
+configure terminal
+hostname PyS-SW-CORE
+no ip domain-lookup
+ip domain-name lab-local
+service password-encryption
+enable secret admin
+banner motd # ACCESO AUTORIZADO UNICAMENTE - PyS Networks #
+!
+line console 0
+ password admin
+ login
+ logging synchronous
+ exec-timeout 5 0
+exit
+!
 
+CREACION-DE-VLANS
+---------------------------------------
+!
+vlan 10
+ name DESARROLLO
+exit
+!
+vlan 20
+ name SOPORTE-TI
+exit
+!
+vlan 30
+ name ADMIN
+exit
+!
+vlan 40
+ name GERENCIA
+exit
+!
+vlan 99
+ name GESTION
+exit
+!
+vlan 998
+ name BLACK-HOLE
+exit
+!
+vlan 999
+ name NATIVA
+exit
+!
+
+ENLACE-TRONCAL-HACIA-R1
+---------------------------------------
+!
+interface g0/0
+ description TRONCAL-HACIA-PyS-R1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,40,99,999
+ no shutdown
+exit
+!
+
+ETHERCHANNEL-01-LACP
+---------------------------------------
+!
+interface range g0/1-2
+ description MIEMBROS-LACP-PO1
+ channel-group 1 mode active
+ no shutdown
+exit
+!
+interface port-channel 1
+ description LACP-HACIA-SW-ACCESS-01
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,40,99,999
+ no shutdown
+exit
+!
+
+ETHERCHANNEL-02-LACP
+---------------------------------------
+!
+interface range g0/3 , g1/0
+ description MIEMBROS-LACP-PO2
+ channel-group 2 mode active
+ no shutdown
+exit
+!
+interface port-channel 2
+ description LACP-HACIA-SW-ACCESS-02
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,40,99,999
+ no shutdown
+exit
+!
+
+ETHERCHANNEL-03-LACP
+---------------------------------------
+!
+interface range g1/1-2
+ description MIEMBROS-LACP-PO3
+ channel-group 3 mode active
+ no shutdown
+exit
+!
+interface port-channel 3
+ description LACP-HACIA-SW-ACCESS-03
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,40,99,999
+ no shutdown
+exit
+!
+
+SVI-GESTION-VLAN-99
+---------------------------------------
+!
+interface vlan 99
+ description GESTION-SWITCH-CORE
+ ip address 192.168.10.122 255.255.255.248
+ no shutdown
+exit
+!
+ip default-gateway 192.168.10.121
+!
+
+PUERTOS-SIN-USO-BLACK-HOLE
+---------------------------------------
+!
+interface range gi2/0-3
+ description PUERTOS-SIN-USO
+ switchport mode access
+ switchport access vlan 998
+ shutdown
+exit
+!
+interface range gi3/0-3
+ description PUERTOS-SIN-USO
+ switchport mode access
+ switchport access vlan 998
+ shutdown
+exit
+!
+
+SSHv2-ADMINISTRACION-REMOTA
+---------------------------------------
+!
+crypto key generate rsa modulus 2048
+username admin privilege 15 secret admin
+ip ssh version 2
+!
+line vty 0 15
+ login local
+ transport input ssh
+ logging synchronous
+ exec-timeout 5 0
+exit
+!
+end
+write memory
